@@ -4,7 +4,10 @@
   "description": "덕후에 의한 덕후를 위한 덕후의 서비스",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app"
+    "start": "cross-env NODE_ENV=production nodemon app",
+    "start:dev": "cross-env NODE_ENV=development nodemon app",
+    "start:prod": "cross-env NODE_ENV=production node app",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "YOON",
   "license": "MIT",
@@ -27,6 +30,7 @@
     "sequelize-cli": "^6.2.0"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "nodemon": "^2.0.16"
   }
 }

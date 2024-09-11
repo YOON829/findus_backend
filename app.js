@@ -5,10 +5,18 @@ const path = require("path");
 const session = require("express-session");
 const nunjucks = require("nunjucks");
 const dotenv = require("dotenv");
+
 const passport = require("passport");
 const cors = require("cors"); // CORS 설정을 위한 미들웨어
 
 dotenv.config();
+
+if (process.env.NODE_ENV === 'production') {
+  dotenv.config({ path: '.env.production' });  // 프로덕션 환경
+} else {
+  dotenv.config({ path: '.env.development' });  // 개발 환경
+}
+
 const routes = require("./routes");
 const imageRoutes = require("./routes/image");
 const workRoutes = require("./routes/work");
@@ -38,13 +46,13 @@ sequelize
 // CORS 설정: 프론트엔드의 요청을 허용
 app.use(
   cors({
-    origin: "http://localhost:3000", // 프론트엔드가 실행되는 주소
-    credentials: true, // 쿠키를 포함한 요청을 허용
+    origin: process.env.FRONTEND_URL,  // 환경 변수로 프론트엔드 URL 설정
+    credentials: true,  // 쿠키를 포함한 요청을 허용
   })
 );
 
 // photodata 폴더를 정적으로 제공하는 설정
-app.use('/photodata', express.static(path.join(__dirname, '../photodata')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 app.use(morgan("dev"));
