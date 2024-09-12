@@ -160,7 +160,10 @@ sequelize
 // CORS 설정
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",  // 환경 변수로 프론트엔드 URL 설정
+    origin: [
+      "http://localhost:3000",   // 로컬 개발 환경
+      "http://13.209.43.10:3000", // 배포된 프론트엔드 서버 (예시)
+    ],
     credentials: true,  // 쿠키를 포함한 요청을 허용
   })
 );
@@ -168,6 +171,8 @@ app.use(
 // 정적 파일 제공 설정
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/photodata', express.static(path.join(__dirname, '../photodata')));
+app.use(express.static(path.join(__dirname, "build")));
+
 
 app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
@@ -210,6 +215,12 @@ app.use("/api/image", imageRoutes);
 app.use("/api/work", workRoutes);
 app.use("/auth", authRoutes);
 app.use("/", placeRoutes);
+
+// 클라이언트 사이드 라우팅을 위한 처리 (index.html 리턴)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
 
 // 404 에러 핸들러
 app.use((req, res, next) => {
