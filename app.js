@@ -133,11 +133,14 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const app = express();
-const routes = require("./routes");
-const imageRoutes = require("./routes/image");
-const workRoutes = require("./routes/work");
-const authRoutes = require("./routes/auth");
-const placeRoutes = require("./routes/place");
+const routes = require("./routes"); // 기본 라우트 파일
+const imageRoutes = require("./routes/image"); // 이미지 관련 라우트
+const workRoutes = require("./routes/work"); // 작업 관련 라우트
+const authRoutes = require("./routes/auth"); // 인증 관련 라우트
+const placeRoutes = require("./routes/place"); // 장소 관련 라우트
+const bookmarkRoutes = require('./routes/bookmark'); // 북마크 관련 라우트
+const reviewRoutes = require('./routes/review'); // 리뷰 관련 라우트
+
 
 passportConfig(); // 패스포트 설정
 app.set("port", process.env.PORT || 5000);
@@ -173,13 +176,14 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/photodata', express.static(path.join(__dirname, '../photodata')));
 app.use(express.static(path.join(__dirname, "build")));
 
-
+// 미들웨어 설정
 app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
+// 세션 설정
 app.use(
   session({
     resave: false,
@@ -187,7 +191,7 @@ app.use(
     secret: process.env.COOKIE_SECRET,
     cookie: {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production" ? true : false,
       maxAge: 1000 * 60 * 60 * 24, // 1일
     },
   })
@@ -210,11 +214,14 @@ app.use(passport.session());
 // );
 
 // 라우트 설정
-app.use("/api", routes);
-app.use("/api/image", imageRoutes);
-app.use("/api/work", workRoutes);
-app.use("/auth", authRoutes);
-app.use("/", placeRoutes);
+app.use("/api", routes); // 기본 API 라우트
+app.use("/api/image", imageRoutes); // 이미지 관련 API 라우트
+app.use("/api/work", workRoutes); // 작업 관련 API 라우트
+app.use("/auth", authRoutes); // 인증 관련 API 라우트
+app.use("/", placeRoutes); // 장소 관련 라우트
+app.use("/api/bookmark", bookmarkRoutes); // 북마크 관련 API 라우트
+app.use('/api/reviews', reviewRoutes); // 리뷰 관련 API 라우트
+
 
 // 클라이언트 사이드 라우팅을 위한 처리 (index.html 리턴)
 app.get('*', (req, res) => {

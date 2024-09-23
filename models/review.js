@@ -1,15 +1,16 @@
 const Sequelize = require("sequelize");
 
-class Bookmark extends Sequelize.Model {
+class Review extends Sequelize.Model {
   static associate(models) {
+    // Review는 Place와 User에 속합니다.
     this.belongsTo(models.Place, { foreignKey: "place_id" });
     this.belongsTo(models.User, { foreignKey: "user_id" });
   }
 
   static initiate(sequelize) {
-    Bookmark.init(
+    Review.init(
       {
-        bookmark_id: {
+        review_id: {
           type: Sequelize.INTEGER,
           primaryKey: true,
           allowNull: false,
@@ -17,22 +18,30 @@ class Bookmark extends Sequelize.Model {
         },
         place_id: {
           type: Sequelize.INTEGER,
-          allowNull: true,
+          allowNull: false,
           references: {
-            model: "Place",
+            model: "place",
             key: "place_id",
           },
         },
         user_id: {
           type: Sequelize.INTEGER,
-          allowNull: true,
+          allowNull: false,
           references: {
-            model: "User",
+            model: "user",
             key: "user_id",
           },
         },
-        check: {
-          type: Sequelize.TINYINT,
+        rating: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          validate: {
+            min: 1,
+            max: 5,
+          },
+        },
+        comment: {
+          type: Sequelize.TEXT,
           allowNull: true,
         },
         created_at: {
@@ -48,13 +57,13 @@ class Bookmark extends Sequelize.Model {
       },
       {
         sequelize,
-        modelName: "Bookmark",
-        tableName: "bookmark",
+        modelName: "Review",
+        tableName: "review",
         timestamps: false,
         indexes: [
           {
             unique: true,
-            fields: ["bookmark_id"],
+            fields: ["review_id"],
           },
           {
             fields: ["place_id"],
@@ -68,4 +77,4 @@ class Bookmark extends Sequelize.Model {
   }
 }
 
-module.exports = Bookmark;
+module.exports = Review;
