@@ -1,4 +1,4 @@
-const db = require('../models');  // models/index.js 파일에서 Sequelize 인스턴스를 가져옵니다.
+const db = require('../models');
 
 const mappings = {
     region: {

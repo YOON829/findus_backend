@@ -1,4 +1,3 @@
-// controllers/bookmarkController.js
 const { Bookmark, Place, Image, Work } = require("../models");
 
 exports.addBookmark = async (req, res) => {

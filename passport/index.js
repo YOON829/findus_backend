@@ -1,30 +1,3 @@
-// const passport = require("passport");
-// const google = require("./googleStrategy");
-//
-// const { User } = require("../models");
-//
-// module.exports = () => {
-//   passport.serializeUser((user, done) => {
-//     // console.log("user>>", user);
-//     done(null, user);
-//   });
-//
-//   passport.deserializeUser((user, done) => {
-//     // console.log("user>>>>>>", user)
-//     console.log("test_check", user);
-//     let id = user.user_id;
-//     User.findOne({
-//       where: { user_id: id },
-//     })
-//       .then((user) => {
-//         console.log("user^", user);
-//         done(null, user);
-//       })
-//       .catch((err) => done(err));
-//   });
-//   google();
-// };
-//
 
 const passport = require("passport");
 const google = require("./googleStrategy");
